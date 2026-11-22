@@ -380,7 +380,7 @@ footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
 <p class="lead" style="margin-top:20px">Zydan is an embroidery manufacturer with 25+ years of experience and 10+ years of exporting. We design for fashion brands and supply panels, yokes and finished pieces worldwide from India — everything made in-house.</p>
 <dl class="dl">
 <div><dt>Phone / WhatsApp</dt><dd><a href="tel:+918879565427">+91 88795 65427</a><small style="display:block;font-weight:300;font-size:13px;color:var(--soft);margin-top:4px">Alternate: <a href="tel:+919619207848">+91 96192 07848</a></small></dd></div>
-<div><dt>Email</dt><dd><a href="mailto:zydanfashion@gmail.com">zydanfashion@gmail.com</a></dd></div>
+<div><dt>Email</dt><dd><a href="mailto:zydanfashion@gmail.com">zydanfashion@gmail.com</a><small style="display:block;font-weight:300;font-size:13px;margin-top:4px"><a href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=zydanfashion@gmail.com" target="_blank" rel="noopener" style="color:var(--plum)">Write in Gmail</a></small></dd></div>
 <div><dt>Supplying from</dt><dd>India, to brands worldwide</dd></div>
 <div><dt>We work with</dt><dd>Fashion brands, designers, bridal &amp; couture houses, private labels</dd></div>
 </dl>
@@ -534,9 +534,21 @@ if(!name){sent.textContent='Please add your name.';sent.classList.add('show');re
 const picks=[...form.querySelectorAll('input[name=i]:checked')].map(x=>x.value).join(', ')||'—';
 const msg=`Hi Zydan Fashion House, I'm ${name}${$('f-brand').value.trim()?' from '+$('f-brand').value.trim():''}${$('f-country').value?' ('+$('f-country').value+')':''}.\nInterested in: ${picks}.\n${$('f-msg').value.trim()}${$('f-email').value.trim()?'\nEmail: '+$('f-email').value.trim():''}`;
 const mode=(e.submitter&&e.submitter.value)||'wa';
-const url=mode==='mail'?'mailto:zydanfashion@gmail.com?subject='+encodeURIComponent('Embroidery enquiry from '+name)+'&body='+encodeURIComponent(msg):'https://wa.me/918879565427?text='+encodeURIComponent(msg);
-sent.innerHTML='';const t=document.createElement('span');t.textContent=mode==='mail'?'Your email is ready. ':'Your WhatsApp message is ready — we usually reply fastest here. ';const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.className=mode==='mail'?'btn':'btn wa';a.style.marginTop='10px';a.textContent=mode==='mail'?'Open email and send':'Open WhatsApp and send';
-sent.append(t,document.createElement('br'),a);sent.classList.add('show')});
+const subj='Embroidery enquiry from '+name;
+const mk=(href,txt,cls,blank)=>{const a=document.createElement('a');a.href=href;a.className=cls;a.textContent=txt;a.style.margin='10px 8px 0 0';if(blank){a.target='_blank';a.rel='noopener'}return a};
+sent.innerHTML='';const t=document.createElement('span');
+if(mode==='mail'){
+t.textContent='Your email is ready — choose how to send it to zydanfashion@gmail.com:';
+const gm=mk('https://mail.google.com/mail/?view=cm&fs=1&to=zydanfashion@gmail.com&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg),'Open in Gmail','btn',true);
+const ma=mk('mailto:zydanfashion@gmail.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(msg),'Open mail app','btn ghost',false);
+const cp=document.createElement('button');cp.type='button';cp.className='btn ghost';cp.style.margin='10px 8px 0 0';cp.textContent='Copy message';
+cp.onclick=async()=>{const full='To: zydanfashion@gmail.com\nSubject: '+subj+'\n\n'+msg;try{await navigator.clipboard.writeText(full);cp.textContent='Copied — paste in any email'}catch(x){const ta=document.createElement('textarea');ta.value=full;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');cp.textContent='Copied — paste in any email'}catch(y){cp.textContent='Copy failed'}ta.remove()}};
+const wrap=document.createElement('div');wrap.append(gm,ma,cp);sent.append(t,wrap);
+}else{
+t.textContent='Your WhatsApp message is ready — we usually reply fastest here.';
+sent.append(t,document.createElement('br'),mk('https://wa.me/918879565427?text='+encodeURIComponent(msg),'Open WhatsApp and send','btn wa',true));
+}
+sent.classList.add('show')});
 }
 </script>
 </body>
